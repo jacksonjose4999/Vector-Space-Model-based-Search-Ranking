@@ -12,12 +12,12 @@ def read_files(path):
         size += 1
         f = file
 
-    docs = [[f] * (size+1)]
-    i = 0
+    docs = [f] * (size)
+    j = 0
     for file in glob.glob("*.pdf"):
         print(file)
-        docs[i] = file
-        i += 1
+        docs[j] = file
+        j += 1
         # creating a pdf file object
         pdfFileObj = open(file, 'rb')
         # creating a pdf reader object
