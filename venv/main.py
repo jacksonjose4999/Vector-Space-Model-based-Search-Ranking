@@ -79,7 +79,7 @@ for unique_word in document_unique_words:
 # print(complete_array_with_count)
 # print(len(complete_array_with_count))
 
-ranking_values_query = []
+ranking_values_query = dict()
 
 user_query = input("Search the novels : ")
 user_query = user_query.split(" ")
@@ -94,7 +94,13 @@ for words_in_query in unique_words_in_query:
     unique_words_in_query[words_in_query] = (1+math.log(unique_words_in_query[words_in_query]))
 
 for documents in range(0,documents_in_consideration):
+    result = 0.0
     for words_in_query in unique_words_in_query:
-        if words_in_query is in complete_array_with_count:
+        if complete_array_with_count.__contains__(words_in_query):
+            result = result + (complete_array_with_count[words_in_query][documents]*unique_words_in_query[words_in_query])
+        ranking_values_query[documents] = result
 
+for i in sorted(ranking_values_query.values()):
+    print(i)
 
+# print(ranking_values_query)
