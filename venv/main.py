@@ -1,10 +1,8 @@
-import glob
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-import os.path
 import math
 import re
+import operator
 
 stop_words = set(stopwords.words('english'))
 
@@ -49,6 +47,7 @@ for document_counter in range(1, documents_in_consideration + 1):
 
 #tf-idf of all the words in the document
 complete_array_with_count = dict()
+denominators = [0,0,0,0,0,0,0,0]
 
 #number of documents the word has occured in, DOCUMENT FREQUENCY
 document_frequency = dict()
@@ -73,11 +72,15 @@ for unique_word in document_unique_words:
         if current_word_count == 0:
             document_wise_words_count.append(0)
         else:
-            document_wise_words_count.append((1 + math.log(current_word_count, 10))*(math.log(documents_in_consideration/document_frequency[unique_word],10)))
+            result = (1 + math.log(current_word_count, 10))*(math.log(documents_in_consideration/document_frequency[unique_word],10))
+            document_wise_words_count.append(result)
+            denominators[document_counter] = denominators[document_counter] + (result*result)
     complete_array_with_count[unique_word] = document_wise_words_count
 
-# print(complete_array_with_count)
-# print(len(complete_array_with_count))
+for counter in range(0,documents_in_consideration):
+    denominators[counter] = math.sqrt(denominators[counter])
+    for words in document_unique_words:
+        complete_array_with_count[words][counter] = complete_array_with_count[words][counter]/denominators[counter]
 
 ranking_values_query = dict()
 
@@ -98,9 +101,9 @@ for documents in range(0,documents_in_consideration):
     for words_in_query in unique_words_in_query:
         if complete_array_with_count.__contains__(words_in_query):
             result = result + (complete_array_with_count[words_in_query][documents]*unique_words_in_query[words_in_query])
-        ranking_values_query[documents] = result
+        ranking_values_query[documents+1] = result
 
-for i in sorted(ranking_values_query.values()):
-    print(i)
+print(ranking_values_query)
 
-# print(ranking_values_query)
+
+
