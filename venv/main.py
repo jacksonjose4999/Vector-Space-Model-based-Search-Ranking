@@ -7,7 +7,7 @@ import operator
 stop_words = set(stopwords.words('english'))
 
 # Number of documents to be indexed
-documents_in_consideration = 2
+documents_in_consideration = 8
 
 # Make this true if you wish to use lemmatization
 use_lemmatization = False
